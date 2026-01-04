@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 
-const scene = new THREE.Scene();
-// 1. Add Exponential Fog to create "depth" in the dark room
+
 scene.fog = new THREE.FogExp2(0x000000, 0.1); 
 scene.background = new THREE.Color('black');
 
@@ -10,10 +9,10 @@ camera.position.set(0, 2, 5);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
-// 2. Enable Shadows in the renderer
+
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap; 
-// 3. Set Tonemapping for a more "Cycles/Filmic" look
+
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.2;
 
