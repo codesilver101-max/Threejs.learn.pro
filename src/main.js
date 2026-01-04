@@ -1,43 +1,34 @@
 import * as THREE from 'three';
-import { planegeometry,cubegeometry} from './geometrys/simplegeometrys.js'; 
+import { planegeometry, cubegeometry } from './geometrys/simplegeometrys.js'; 
 import { keys } from "./userinputs/keyboardinputs.js";
 import { controls } from './userinputs/controls.js';
-import { scene, camera, renderer, light } from './scene/scene.js';
+import { scene, camera, renderer, light} from './scene/scene.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import init from 'https://esm.sh/@dimforge/rapier3d';
 import { GUI } from 'lil-gui'; 
+import {useraycaster} from './userinputs/raycasting.js'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { SelectionHelper } from 'three/examples/jsm/Addons.js';
 
 
-light.intensity = 1.5; 
-light.position.set(5, 5, 5);
-
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap; 
-
-
-cubegeometry.position.y = 0.51; 
-
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 scene.add(planegeometry);
-scene.add(cubegeometry); 
+planegeometry.name = "bottom";
 
-const gui = new GUI();
+light.position.y = 2.3
+light.position.x = 0
+light.position.z = 0.2
 
-const lightFolder = gui.addFolder('Lighting');
-lightFolder.add(light, 'intensity', 0, 10).name('Intensity');
-lightFolder.add(light.position, 'y', 1, 20).name('Light Height');
 
+
+const gltfloader = new GLTFLoader();
+gltfloader.load('../Public/Thingy.glb',(gltfschene) => {
+
+  scene.add(gltfschene.scene);
+})
 
 function animate() {
-  
-  controls.update();  
- 
-  if (keys.forward)  light.position.z -= 0.1;
-  if (keys.backward) light.position.z += 0.1;
-  if (keys.left)     light.position.x -= 0.1;
-  if (keys.right)    light.position.x += 0.1;
-
-  // Final Render
+  controls.update();    
   renderer.render(scene, camera);
 }
 
